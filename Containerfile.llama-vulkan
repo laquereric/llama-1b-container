@@ -1,6 +1,25 @@
 # Containerfile for llama.cpp with Vulkan support on macOS (via libkrun)
 # Uses AlmaLinux 9 to match the available slp/mesa-krunkit COPR (epel-9-aarch64)
 
+# -----------------------------------------------------------------------------
+# Stage 0: build glslc from source (shaderc)
+# glslc is required by llama.cpp cmake but not available in EPEL 9 aarch64.
+FROM almalinux:9 AS shaderc-builder
+
+RUN dnf -y install gcc gcc-c++ make git cmake ninja-build python3
+
+WORKDIR /shaderc
+RUN git clone https://github.com/google/shaderc . \
+    && python3 utils/git-sync-deps \
+    && cmake -GNinja \
+             -DCMAKE_BUILD_TYPE=Release \
+             -DSHADERC_SKIP_TESTS=ON \
+             -DSHADERC_ENABLE_SHARED_CRT=ON \
+             -B build \
+    && ninja -C build glslc
+
+# -----------------------------------------------------------------------------
+# Stage 1: build llama-server with Vulkan support
 FROM almalinux:9 AS builder
 
 USER 0
@@ -14,14 +33,14 @@ RUN dnf -y install dnf-plugins-core epel-release \
     && dnf versionlock mesa-vulkan-drivers
 
 # 2. Install build dependencies for llama.cpp
-# glslc (required by llama.cpp cmake) is not in EPEL 9 — use LunarG Vulkan SDK repo.
 # Avoid groupinstall "Development Tools" — pulls in annobin which requires LLVM 20,
 # conflicting with the mesa-krunkit COPR's LLVM 19 dependency.
-RUN rpm --import https://packages.lunarg.com/lunarg-signing-key-pub.asc \
-    && curl -o /etc/yum.repos.d/lunarg-vulkan-rhel9.repo https://packages.lunarg.com/vulkan/lunarg-vulkan-rhel9.repo \
-    && dnf -y install gcc gcc-c++ make git cmake wget libcurl-devel shaderc
+RUN dnf -y install gcc gcc-c++ make git cmake wget libcurl-devel
 
-# 3. Clone and build llama.cpp with Vulkan support
+# 3. Copy glslc from the shaderc build stage
+COPY --from=shaderc-builder /shaderc/build/glslc/glslc /usr/local/bin/glslc
+
+# 4. Clone and build llama.cpp with Vulkan support
 WORKDIR /build
 RUN git clone https://github.com/ggml-org/llama.cpp.git . \
     && cmake -B build -D GGML_OPENMP=OFF -D GGML_VULKAN=ON \
