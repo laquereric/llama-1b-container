@@ -14,8 +14,9 @@ RUN dnf -y install dnf-plugins-core epel-release \
     && dnf versionlock mesa-vulkan-drivers
 
 # 2. Install build dependencies for llama.cpp
-RUN dnf -y groupinstall "Development Tools" \
-    && dnf -y install git cmake wget libcurl-devel curl shaderc
+# Avoid groupinstall "Development Tools" — it pulls in annobin which requires
+# LLVM 20, conflicting with the mesa-krunkit COPR's LLVM 19 dependency.
+RUN dnf -y install gcc gcc-c++ make git cmake wget libcurl-devel curl shaderc
 
 # 3. Clone and build llama.cpp with Vulkan support
 WORKDIR /build
