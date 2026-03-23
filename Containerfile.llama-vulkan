@@ -14,8 +14,10 @@ RUN git clone https://github.com/google/shaderc . \
     && cmake -DCMAKE_BUILD_TYPE=Release \
              -DSHADERC_SKIP_TESTS=ON \
              -DSHADERC_ENABLE_SHARED_CRT=ON \
+             -DCMAKE_INSTALL_PREFIX=/shaderc/install \
              -B build \
-    && cmake --build build --target glslc -j$(nproc)
+    && cmake --build build --target glslc -j$(nproc) \
+    && cmake --install build --component glslc
 
 # -----------------------------------------------------------------------------
 # Stage 1: build llama-server with Vulkan support
@@ -37,7 +39,7 @@ RUN dnf -y install dnf-plugins-core epel-release \
 RUN dnf -y install gcc gcc-c++ make git cmake wget libcurl-devel
 
 # 3. Copy glslc from the shaderc build stage
-COPY --from=shaderc-builder /shaderc/build/glslc/glslc /usr/local/bin/glslc
+COPY --from=shaderc-builder /shaderc/install/bin/glslc /usr/local/bin/glslc
 
 # 4. Clone and build llama.cpp with Vulkan support
 WORKDIR /build
