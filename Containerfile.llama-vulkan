@@ -6,17 +6,16 @@
 # glslc is required by llama.cpp cmake but not available in EPEL 9 aarch64.
 FROM almalinux:9 AS shaderc-builder
 
-RUN dnf -y install gcc gcc-c++ make git cmake ninja-build python3
+RUN dnf -y install gcc gcc-c++ make git cmake python3
 
 WORKDIR /shaderc
 RUN git clone https://github.com/google/shaderc . \
     && python3 utils/git-sync-deps \
-    && cmake -GNinja \
-             -DCMAKE_BUILD_TYPE=Release \
+    && cmake -DCMAKE_BUILD_TYPE=Release \
              -DSHADERC_SKIP_TESTS=ON \
              -DSHADERC_ENABLE_SHARED_CRT=ON \
              -B build \
-    && ninja -C build glslc
+    && cmake --build build --target glslc -j$(nproc)
 
 # -----------------------------------------------------------------------------
 # Stage 1: build llama-server with Vulkan support
