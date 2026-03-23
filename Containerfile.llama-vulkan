@@ -16,8 +16,8 @@ RUN git clone https://github.com/google/shaderc . \
              -DSHADERC_ENABLE_SHARED_CRT=ON \
              -DCMAKE_INSTALL_PREFIX=/shaderc/install \
              -B build \
-    && cmake --build build --target glslc -j$(nproc) \
-    && cmake --install build --component glslc
+    && cmake --build build -j$(nproc) \
+    && cmake --install build
 
 # -----------------------------------------------------------------------------
 # Stage 1: build llama-server with Vulkan support
