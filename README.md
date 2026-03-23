@@ -55,13 +55,26 @@ If `/dev/dri` is missing, the machine is not using `libkrun`. Run `podman machin
 
 ---
 
-## 3. Build the Container Image
+## 3. Get the Container Image
+
+Choose one path:
+
+### Option A — Download pre-built image (faster)
 
 ```bash
+podman pull ghcr.io/laquereric/llama-cpp-vulkan:latest
+podman tag ghcr.io/laquereric/llama-cpp-vulkan:latest llama-cpp-vulkan
+```
+
+### Option B — Build from source
+
+```bash
+git clone https://github.com/laquereric/llama-1b-container.git
+cd llama-1b-container
 podman build -t llama-cpp-vulkan -f Containerfile.llama-vulkan .
 ```
 
-This installs a patched MESA driver (`slp/mesa-krunkit`) inside the container that talks to the `virtio-gpu` device exposed by `libkrun`.
+The build compiles `glslc` (from [google/shaderc](https://github.com/google/shaderc)) and `llama-server` from source with Vulkan enabled. Expect ~20–30 minutes on first run.
 
 ---
 
@@ -119,7 +132,7 @@ macOS Metal GPU
       │
   libkrun VM  (krunkit hypervisor)
       │  virtio-gpu (Venus protocol)
-  Fedora 40 container
+  AlmaLinux 9 container
       │  Vulkan (patched mesa-krunkit driver)
   llama.cpp (llama-server)
 ```
