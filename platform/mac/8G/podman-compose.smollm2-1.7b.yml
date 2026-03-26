@@ -1,18 +1,3 @@
-# =============================================================================
-# podman-compose.smollm2-1.7b.yml — SmolLM2-1.7B-Instruct  •  Q4_K_M  •  ~1.1 GB
-# Minimal footprint; 80–120 tok/s; best for background agents; Apache 2.0
-# Leaves maximum RAM for other apps; ideal for concurrent workloads
-#
-# Download:
-#   huggingface-cli download prithivMLmods/SmolLM-1.7B-Instruct-GGUF \
-#     SmolLM2-1.7B-Instruct-Q4_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.smollm2-1.7b.yml up
-#
-# RAM budget at 8G: ~1.1 GB model; very comfortable; runs alongside other apps
-# =============================================================================
-
 name: llama-mac-8g-smollm2-1-7b
 
 services:

@@ -1,0 +1,23 @@
+model_name: DeepSeek-R1-Distill-Qwen-32B
+family: deepseek-r1
+params_b: 32.0
+active_params_b: 32.0
+quant: Q4_K_M
+file_size_gb: 19.9
+ctx_size: 8192
+flash_attn: true
+
+download:
+  repo: bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF
+  file: DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf
+  cmd: "huggingface-cli download bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 24
+  model_gb: 19.9
+  remaining_gb: 4.1
+  pressure: close_all_apps
+
+tags: [reasoning, math, coding]
+license: Apache 2.0
+description: Best reasoning on 24 GB; o1-class; generates thinking tokens; close all other apps

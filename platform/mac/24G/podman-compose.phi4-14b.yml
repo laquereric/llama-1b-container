@@ -1,18 +1,3 @@
-# =============================================================================
-# podman-compose.phi4-14b.yml — Phi-4-14B  •  Q5_K_M  •  ~10 GB
-# Comfortable fit on 24 GB; full KV cache headroom for long sessions; MIT license
-# Use when quality + headroom matter more than fitting the largest possible model
-#
-# Download:
-#   huggingface-cli download bartowski/phi-4-GGUF \
-#     phi-4-Q5_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.phi4-14b.yml up
-#
-# RAM budget at 24G: ~10 GB model; ~14 GB remaining — generous KV headroom
-# =============================================================================
-
 name: llama-mac-24g-phi4-14b
 
 services:

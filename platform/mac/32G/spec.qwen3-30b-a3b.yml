@@ -1,0 +1,20 @@
+model_name: Qwen3-30B-A3B
+family: qwen3
+params_b: 30.0
+active_params_b: 3.0
+quant: Q6_K
+file_size_gb: 24.0
+ctx_size: 32768
+flash_attn: true
+download:
+  repo: Qwen/Qwen3-30B-A3B-GGUF
+  file: Qwen3-30B-A3B-Q6_K.gguf
+  cmd: "huggingface-cli download Qwen/Qwen3-30B-A3B-GGUF Qwen3-30B-A3B-Q6_K.gguf --local-dir ~/models"
+ram_budget:
+  total_gb: 32
+  model_gb: 24.0
+  remaining_gb: 8.0
+  pressure: comfortable
+tags: [reasoning, fast, moe, thinking]
+license: Apache 2.0
+description: MoE 30B/3B active; Q6_K ~99% F16 quality; thinking + non-thinking modes; fast generation

@@ -1,0 +1,19 @@
+model_name: Gemma-3-27B
+family: gemma3
+params_b: 27.0
+quant: Q4_0
+file_size_gb: 16.0
+ctx_size: 32768
+flash_attn: true
+download:
+  repo: google/gemma-3-27b-it-qat-q4_0-gguf
+  file: gemma-3-27b-it-q4_0.gguf
+  cmd: "huggingface-cli download google/gemma-3-27b-it-qat-q4_0-gguf gemma-3-27b-it-q4_0.gguf --local-dir ~/models"
+ram_budget:
+  total_gb: 32
+  model_gb: 16.0
+  remaining_gb: 16.0
+  pressure: comfortable
+tags: [multimodal, vision, general, long-context]
+license: Gemma Terms of Service
+description: Official Google QAT quant; best open multimodal 27B; 128K context; very comfortable on 32 GB

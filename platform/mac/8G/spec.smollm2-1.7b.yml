@@ -1,0 +1,23 @@
+model_name: SmolLM2-1.7B-Instruct
+family: smollm2
+params_b: 1.7
+active_params_b: 1.7
+quant: Q4_K_M
+file_size_gb: 1.1
+ctx_size: 8192
+flash_attn: false
+
+download:
+  repo: prithivMLmods/SmolLM-1.7B-Instruct-GGUF
+  file: SmolLM2-1.7B-Instruct-Q4_K_M.gguf
+  cmd: "huggingface-cli download prithivMLmods/SmolLM-1.7B-Instruct-GGUF SmolLM2-1.7B-Instruct-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 8
+  model_gb: 1.1
+  remaining_gb: 6.9
+  pressure: comfortable
+
+tags: [agent, fast, background]
+license: Apache 2.0
+description: Minimal footprint; 80-120 tok/s; best for background agents; runs alongside other apps

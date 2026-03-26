@@ -1,0 +1,22 @@
+model_name: Llama-3.3-70B-Instruct
+family: llama3
+params_b: 70.0
+quant: Q8_0
+file_size_gb: 75.0
+ctx_size: 32768
+flash_attn: true
+download:
+  repo: bartowski/Llama-3.3-70B-Instruct-GGUF
+  include: "Llama-3.3-70B-Instruct-Q8_0*.gguf"
+  first_shard: Llama-3.3-70B-Instruct-Q8_0-00001-of-00002.gguf
+  sharded: true
+  note: "llama-server auto-loads all shards; pass first_shard as the -m argument"
+  cmd: "huggingface-cli download bartowski/Llama-3.3-70B-Instruct-GGUF --include \"Llama-3.3-70B-Instruct-Q8_0*.gguf\" --local-dir ~/models"
+ram_budget:
+  total_gb: 128
+  model_gb: 75.0
+  remaining_gb: 53.0
+  pressure: comfortable
+tags: [general, coding, reasoning]
+license: Meta Llama 3 License
+description: Near-lossless quality ~99.9% F16; best dense 70B model; 128K context; generous KV cache

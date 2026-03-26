@@ -1,0 +1,428 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# bin/manage — detect platform + RAM, list models, run a model container
+#
+# Usage:
+#   bin/manage                # show platform, RAM tier, running model
+#   bin/manage list           # list all models ranked best → worst for this platform
+#   bin/manage run N          # stop current model, start model N
+#   bin/manage stop           # stop the currently running model
+#   bin/manage download N     # print the huggingface-cli download command for model N
+#   bin/manage status         # alias for default (no args)
+
+require 'yaml'
+require 'json'
+require 'pathname'
+
+REPO_ROOT    = Pathname.new(__FILE__).dirname.parent
+LIB_DIR      = REPO_ROOT / 'lib'
+PLATFORM_DIR = REPO_ROOT / 'platform'
+API_URL      = 'http://localhost:8080/health'
+
+$LOAD_PATH.unshift(LIB_DIR.to_s)
+require 'detect'
+
+RAM_TIERS = %w[8G 16G 24G 32G 64G 128G 256G].freeze
+
+QUANT_QUALITY = {
+  'Q8_0'   => 1.000, 'Q6_K'   => 0.990, 'Q5_K_M' => 0.980, 'Q5_K_S' => 0.970,
+  'Q5_K'   => 0.975, 'Q4_K_M' => 0.950, 'Q4_K_S' => 0.900, 'Q4_0'   => 0.900,
+  'Q3_K_M' => 0.800, 'Q3_K_S' => 0.780, 'Q2_K'   => 0.700, 'IQ4_XS' => 0.930,
+  'IQ3_XS' => 0.850, 'IQ2_XXS' => 0.720, 'IQ1_M'  => 0.620, 'IQ1_S'  => 0.600
+}.freeze
+
+PRESSURE_SYMBOL = {
+  'comfortable'   => '✓',
+  'adequate'      => '~',
+  'tight'         => '!',
+  'close_all_apps' => '!!'
+}.freeze
+
+# ── Platform / RAM detection ──────────────────────────────────────────────────
+
+def detect_platform
+  Detect.platform
+end
+
+def detect_ram_gb
+  case detect_platform
+  when :mac
+    bytes = `sysctl -n hw.memsize 2>/dev/null`.strip.to_i
+    (bytes / (1024.0**3)).round
+  when :linux, :jetson_orin_nano_8g
+    line = File.readlines('/proc/meminfo').find { |l| l.start_with?('MemTotal:') }
+    kb   = line&.scan(/\d+/)&.first.to_i
+    (kb / (1024.0**2)).round
+  when :win
+    out = `wmic OS get TotalVisibleMemorySize /Value 2>nul`.strip
+    kb  = out.scan(/\d+/).first.to_i
+    (kb / (1024.0**2)).round
+  else
+    8
+  end
+rescue
+  8
+end
+
+def ram_tier(ram_gb)
+  case ram_gb
+  when 0..11   then '8G'
+  when 12..19  then '16G'
+  when 20..27  then '24G'
+  when 28..47  then '32G'
+  when 48..95  then '64G'
+  when 96..191 then '128G'
+  else              '256G'
+  end
+end
+
+def available_tiers(current_tier)
+  RAM_TIERS[0..RAM_TIERS.index(current_tier)]
+end
+
+# ── Model / spec loading ──────────────────────────────────────────────────────
+
+def load_all_specs(platform, tiers)
+  specs = []
+  tiers.each do |tier|
+    tier_dir = PLATFORM_DIR / platform.to_s / tier
+    next unless tier_dir.exist?
+
+    Dir[tier_dir / 'spec.*.yml'].sort.each do |spec_path|
+      model_id     = File.basename(spec_path, '.yml').delete_prefix('spec.')
+      compose_path = tier_dir / "podman-compose.#{model_id}.yml"
+      next unless compose_path.exist?
+
+      data = YAML.load_file(spec_path)
+      data['_tier']         = tier
+      data['_model_id']     = model_id
+      data['_compose_file'] = compose_path.to_s
+      data['_spec_file']    = spec_path.to_s
+      specs << data
+    rescue => e
+      warn "  WARN: skipping #{spec_path}: #{e.message}"
+    end
+  end
+  specs
+end
+
+# ── Quality scoring ───────────────────────────────────────────────────────────
+#
+# Dense models: score = params_b * quant_quality * 10
+# MoE models:   score = (sqrt(params_b * active_params_b) * (1 + log10(params_b / active_params_b)))
+#                        * quant_quality * 10
+#
+# The MoE formula rewards total capacity (params_b) while respecting that only
+# active_params_b compute each token. The log10 factor amplifies benefit of
+# large expert pools (671B MoE with 37B active ranks much higher than 37B dense).
+
+def quality_score(spec)
+  params = spec['params_b'].to_f
+  active = spec['active_params_b']&.to_f || params
+  q      = QUANT_QUALITY.fetch(spec['quant'].to_s, 0.85)
+
+  effective = if active < params
+                ratio     = params / active
+                Math.sqrt(params * active) * (1.0 + Math.log10(ratio))
+              else
+                params
+              end
+
+  (effective * q * 10).round(1)
+end
+
+def ranked_specs(specs)
+  specs.sort_by { |s| -quality_score(s) }
+end
+
+# ── Container control ─────────────────────────────────────────────────────────
+
+def api_ok?
+  require 'net/http'
+  uri = URI(API_URL)
+  res = Net::HTTP.get_response(uri)
+  res.is_a?(Net::HTTPSuccess)
+rescue
+  false
+end
+
+def running_compose_project
+  output = `podman ps --format '{{.Labels}}' 2>/dev/null`
+  m = output.match(/com\.docker\.compose\.project=([^\s,\}]+)/)
+  m ? m[1] : nil
+rescue
+  nil
+end
+
+def stop_all_llama_containers
+  # Stop all containers with the llama-server service label
+  ids = `podman ps -q --filter 'label=com.docker.compose.service=llama-server' 2>/dev/null`.strip
+  unless ids.empty?
+    print '  Stopping running llama-server'
+    system('podman', 'stop', *ids.split, out: File::NULL, err: File::NULL)
+    puts ' done'
+  end
+
+  # Also run podman-compose down for the active project (removes network, etc.)
+  project = running_compose_project
+  if project&.start_with?('llama-')
+    Dir[PLATFORM_DIR / '**' / 'podman-compose.*.yml'].each do |cf|
+      content = File.read(cf)
+      name_match = content.match(/^name:\s+(.+)$/)
+      next unless name_match && name_match[1].strip == project
+      puts "  podman-compose down (#{File.basename(cf)})"
+      system("podman-compose -f #{cf} down", out: File::NULL, err: File::NULL)
+      break
+    end
+  end
+rescue
+  nil
+end
+
+def start_model(spec)
+  compose_file = spec['_compose_file']
+  Dir.chdir(File.dirname(compose_file)) do
+    unless system("podman-compose -f #{compose_file} up -d")
+      abort "  FAILED: podman-compose up failed for #{spec['model_name']}"
+    end
+  end
+
+  print '  Waiting for API'
+  30.times do
+    break if api_ok?
+    print '.'
+    $stdout.flush
+    sleep 2
+  end
+  puts
+
+  if api_ok?
+    puts "  ✓ Ready at http://localhost:8080"
+  else
+    puts "  ✗ Container started but API not yet responding (model may still be loading)"
+    puts "    Check: podman logs -f \$(podman ps -q)"
+  end
+end
+
+# ── Display helpers ───────────────────────────────────────────────────────────
+
+def fmt_size(gb)
+  format('%5.1fG', gb)
+end
+
+def fmt_ctx(ctx)
+  ctx >= 65_536 ? "#{ctx / 1024}K" :
+  ctx >= 1_024  ? "#{ctx / 1024}K" :
+  ctx.to_s
+end
+
+def fmt_params(p, active)
+  if active && active < p
+    "#{p}B/#{active}B"
+  else
+    "#{p}B"
+  end
+end
+
+def truncate(str, len)
+  str.length > len ? str[0, len - 1] + '…' : str
+end
+
+def print_list_header
+  printf("  %3s  %-35s  %-14s  %-7s  %5s  %5s  %-3s  %s  %s\n",
+         '#', 'Model', 'Params', 'Quant', 'Size', 'Ctx', 'RAM', 'P', 'Tags')
+  puts '  ' + '-' * 96
+end
+
+def print_model_row(num, spec, current_project)
+  active  = spec['active_params_b']&.to_f
+  params  = spec['params_b'].to_f
+  pressure_sym = PRESSURE_SYMBOL.fetch(spec.dig('ram_budget', 'pressure').to_s, '?')
+  tags    = Array(spec['tags']).first(3).join(',')
+
+  # Determine if this model is currently running
+  compose_name_match = File.read(spec['_compose_file']).match(/^name:\s+(.+)$/)
+  compose_name = compose_name_match&.[](1)&.strip
+  running_marker = (current_project && compose_name == current_project) ? ' ←' : ''
+
+  printf("  %3d  %-35s  %-14s  %-7s  %5s  %5s  %-3s  %-2s  %-30s%s\n",
+         num,
+         truncate(spec['model_name'], 35),
+         fmt_params(params, active),
+         spec['quant'],
+         fmt_size(spec['file_size_gb']),
+         fmt_ctx(spec['ctx_size']),
+         spec['_tier'],
+         pressure_sym,
+         tags,
+         running_marker)
+rescue
+  printf("  %3d  %-35s  (error reading spec)\n", num, spec['_model_id'])
+end
+
+# ── Commands ──────────────────────────────────────────────────────────────────
+
+def cmd_status(platform, ram_gb, tier, specs)
+  project = running_compose_project
+  ranked  = ranked_specs(specs)
+
+  puts "Platform  : #{platform}"
+  puts "RAM       : #{ram_gb} GB  →  tier #{tier}  (#{ranked.size} models available)"
+
+  if project
+    running_spec = ranked.find do |s|
+      name_match = File.read(s['_compose_file']).match(/^name:\s+(.+)$/)
+      name_match&.[](1)&.strip == project
+    rescue
+      false
+    end
+
+    if running_spec
+      puts "Running   : #{running_spec['model_name']}  (#{running_spec['quant']}, ctx #{running_spec['ctx_size']})"
+    else
+      puts "Running   : #{project} (compose project active but not in spec list)"
+    end
+    puts "API       : #{api_ok? ? '✓ healthy' : '✗ not responding'}"
+  else
+    puts "Running   : none"
+  end
+end
+
+def cmd_list(platform, ram_gb, tier, specs)
+  ranked  = ranked_specs(specs)
+  project = running_compose_project
+
+  puts "Platform  : #{platform}  |  RAM: #{ram_gb} GB  |  Tier: #{tier}"
+  puts "Available : #{ranked.size} models (ranked best → worst)\n\n"
+  print_list_header
+  ranked.each_with_index { |s, i| print_model_row(i + 1, s, project) }
+  puts
+  puts "  P  =  pressure  ✓ comfortable  ~ adequate  ! tight  !! close all apps"
+  puts "  Params column: total/active for MoE models (e.g. 30B/3B)"
+end
+
+def cmd_run(num, specs)
+  ranked = ranked_specs(specs)
+  spec   = ranked[num - 1]
+  abort "  ERROR: no model ##{num} (list has #{ranked.size} entries)" unless spec
+
+  puts "Starting  : #{spec['model_name']}"
+  puts "Quant     : #{spec['quant']}  |  Size: #{spec['file_size_gb']} GB  |  Ctx: #{spec['ctx_size']}"
+  puts "Tags      : #{Array(spec['tags']).join(', ')}"
+  puts "License   : #{spec['license']}"
+  puts "RAM       : #{spec.dig('ram_budget', 'model_gb')} GB model  |  #{spec.dig('ram_budget', 'remaining_gb')} GB remaining  |  #{spec.dig('ram_budget', 'pressure')}"
+  puts
+
+  dl = spec['download']
+  if dl
+    model_file = dl['first_shard'] || dl['file']
+    model_path = File.join(Dir.home, 'models', model_file.to_s)
+    unless File.exist?(model_path)
+      puts "  Model not found at ~/models/#{model_file}"
+      puts "  Download with:"
+      puts "    #{dl['cmd']}"
+      puts
+      print "  Continue anyway? [y/N] "
+      answer = $stdin.gets&.chomp&.downcase
+      abort '  Aborted.' unless answer == 'y'
+      puts
+    end
+  end
+
+  stop_all_llama_containers
+
+  puts "  Starting #{spec['model_name']} (#{spec['_tier']}/podman-compose.#{spec['_model_id']}.yml)..."
+  start_model(spec)
+end
+
+def cmd_stop
+  project = running_compose_project
+  if project
+    puts "Stopping  : #{project}"
+  else
+    puts "Nothing running."
+    return
+  end
+  stop_all_llama_containers
+  puts 'Done.'
+end
+
+def cmd_download(num, specs)
+  ranked = ranked_specs(specs)
+  spec   = ranked[num - 1]
+  abort "  ERROR: no model ##{num}" unless spec
+
+  dl = spec['download']
+  abort '  ERROR: no download info in spec' unless dl
+
+  puts "# #{spec['model_name']}  (#{spec['quant']},  #{spec['file_size_gb']} GB)"
+  puts dl['cmd']
+  if dl['sharded']
+    puts
+    puts "# Sharded model — llama-server auto-loads all shards from the first file:"
+    puts "#   #{dl['first_shard']}"
+  end
+end
+
+def print_usage
+  puts <<~USAGE
+    Usage: bin/manage [command] [args]
+
+    Commands:
+      (none)         Show platform, RAM tier, and currently running model
+      status         Alias for no-args
+      list           List all models ranked best → worst for this platform/RAM
+      run N          Stop current model and start model N (number from list)
+      stop           Stop the currently running model container
+      download N     Print the huggingface-cli download command for model N
+      help           Show this help
+
+    Examples:
+      bin/manage
+      bin/manage list
+      bin/manage run 3
+      bin/manage download 5
+      bin/manage stop
+  USAGE
+end
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+
+platform = detect_platform
+ram_gb   = detect_ram_gb
+tier     = ram_tier(ram_gb)
+tiers    = available_tiers(tier)
+specs    = load_all_specs(platform, tiers)
+
+command = ARGV[0]
+
+case command
+when nil, 'status'
+  cmd_status(platform, ram_gb, tier, specs)
+
+when 'list'
+  cmd_list(platform, ram_gb, tier, specs)
+
+when 'run'
+  num = ARGV[1]&.to_i
+  abort "  ERROR: run requires a model number  (e.g.  bin/manage run 3)" if num.nil? || num < 1
+  cmd_run(num, specs)
+
+when 'stop'
+  cmd_stop
+
+when 'download'
+  num = ARGV[1]&.to_i
+  abort "  ERROR: download requires a model number  (e.g.  bin/manage download 3)" if num.nil? || num < 1
+  cmd_download(num, specs)
+
+when 'help', '--help', '-h'
+  print_usage
+
+else
+  warn "Unknown command: #{command}"
+  warn
+  print_usage
+  exit 1
+end

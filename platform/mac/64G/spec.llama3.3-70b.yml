@@ -1,0 +1,19 @@
+model_name: Llama-3.3-70B-Instruct
+family: llama3
+params_b: 70.0
+quant: Q4_K_M
+file_size_gb: 43.0
+ctx_size: 16384
+flash_attn: true
+download:
+  repo: bartowski/Llama-3.3-70B-Instruct-GGUF
+  file: Llama-3.3-70B-Instruct-Q4_K_M.gguf
+  cmd: "huggingface-cli download bartowski/Llama-3.3-70B-Instruct-GGUF Llama-3.3-70B-Instruct-Q4_K_M.gguf --local-dir ~/models"
+ram_budget:
+  total_gb: 64
+  model_gb: 43.0
+  remaining_gb: 21.0
+  pressure: comfortable
+tags: [general, coding, reasoning]
+license: Meta Llama 3 License
+description: Best dense general-purpose model for 64 GB Mac; matches 405B quality; 128K context

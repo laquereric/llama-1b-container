@@ -1,22 +1,3 @@
-# =============================================================================
-# podman-compose.llama4-maverick.yml — Llama-4-Maverick  •  IQ1_S dynamic  •  ~122 GB
-# MoE: 402B total / 17B active per token; multimodal; 1M token context window
-# Meta license; Unsloth dynamic quant — minimum viable quality at this scale
-#
-# ⚠  CLOSE ALL OTHER APPS — leaves ~6 GB for OS at 128 GB total
-#
-# Download (sharded — llama-server auto-loads all shards from first file):
-#   huggingface-cli download unsloth/Llama-4-Maverick-17B-128E-Instruct-GGUF \
-#     --include "Llama-4-Maverick-17B-128E-Instruct-IQ1_S*.gguf" \
-#     --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.llama4-maverick.yml up
-#
-# RAM budget at 128G: ~122 GB model; ~6 GB remaining — very tight; close all apps
-# Note: vision requires a llama.cpp build with vision support enabled
-# =============================================================================
-
 name: llama-mac-128g-llama4-maverick
 
 services:

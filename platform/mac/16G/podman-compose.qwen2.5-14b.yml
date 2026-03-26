@@ -1,18 +1,3 @@
-# =============================================================================
-# podman-compose.qwen2.5-14b.yml — Qwen2.5-14B-Instruct  •  Q4_K_M  •  ~9.0 GB
-# Best multilingual general model at 14B; 100+ languages; Apache 2.0
-# 128K context; strong at general chat, writing, and multilingual tasks
-#
-# Download:
-#   huggingface-cli download bartowski/Qwen2.5-14B-Instruct-GGUF \
-#     Qwen2.5-14B-Instruct-Q4_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.qwen2.5-14b.yml up
-#
-# RAM budget at 16G: ~9.0 GB model; ~7 GB remaining for OS + KV cache — comfortable
-# =============================================================================
-
 name: llama-mac-16g-qwen2-5-14b
 
 services:

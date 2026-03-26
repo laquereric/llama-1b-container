@@ -1,18 +1,3 @@
-# =============================================================================
-# podman-compose.llama3.3-70b.yml — Llama-3.3-70B-Instruct  •  Q4_K_M  •  ~43 GB
-# Best dense general-purpose model for 64 GB Mac; matches 405B quality; Meta license
-# 128K context; best open-weights 70B class model as of early 2026
-#
-# Download:
-#   huggingface-cli download bartowski/Llama-3.3-70B-Instruct-GGUF \
-#     Llama-3.3-70B-Instruct-Q4_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.llama3.3-70b.yml up
-#
-# RAM budget at 64G: ~43 GB model; ~21 GB remaining for OS + KV cache — comfortable
-# =============================================================================
-
 name: llama-mac-64g-llama3-3-70b
 
 services:

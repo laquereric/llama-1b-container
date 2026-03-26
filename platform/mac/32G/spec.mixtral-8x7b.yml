@@ -1,0 +1,20 @@
+model_name: Mixtral-8x7B-Instruct
+family: mixtral
+params_b: 46.7
+active_params_b: 12.9
+quant: Q4_K_M
+file_size_gb: 26.4
+ctx_size: 16384
+flash_attn: true
+download:
+  repo: TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF
+  file: mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf
+  cmd: "huggingface-cli download TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf --local-dir ~/models"
+ram_budget:
+  total_gb: 32
+  model_gb: 26.4
+  remaining_gb: 5.6
+  pressure: close_all_apps
+tags: [general, fast, moe]
+license: Apache 2.0
+description: Sparse MoE 46.7B/12.9B active; 32K context; close all other apps on 32 GB

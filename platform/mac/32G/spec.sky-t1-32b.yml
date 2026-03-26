@@ -1,0 +1,19 @@
+model_name: Sky-T1-32B-Preview
+family: sky-t1
+params_b: 32.0
+quant: Q5_K_M
+file_size_gb: 23.0
+ctx_size: 16384
+flash_attn: true
+download:
+  repo: NovaSky-UC/Sky-T1-32B-Preview-GGUF
+  file: Sky-T1-32B-Preview-Q5_K_M.gguf
+  cmd: "huggingface-cli download NovaSky-UC/Sky-T1-32B-Preview-GGUF Sky-T1-32B-Preview-Q5_K_M.gguf --local-dir ~/models"
+ram_budget:
+  total_gb: 32
+  model_gb: 23.0
+  remaining_gb: 9.0
+  pressure: comfortable
+tags: [reasoning, math, coding]
+license: Apache 2.0
+description: o1-preview competitive on AIME/MATH; RL fine-tune of Qwen2.5-32B; strong reasoning

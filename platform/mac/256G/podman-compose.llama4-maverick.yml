@@ -1,21 +1,3 @@
-# =============================================================================
-# podman-compose.llama4-maverick.yml — Llama-4-Maverick  •  Q2_K  •  ~168 GB
-# MoE: 402B total / 17B active per token; multimodal; 1M token context window
-# Meta license; Q2_K gives substantially better quality than IQ1_S
-# Comfortable fit at 256 GB — best long-context multimodal at this RAM tier
-#
-# Download (sharded — llama-server auto-loads all shards from first file):
-#   huggingface-cli download unsloth/Llama-4-Maverick-17B-128E-Instruct-GGUF \
-#     --include "Llama-4-Maverick-17B-128E-Instruct-Q2_K*.gguf" \
-#     --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.llama4-maverick.yml up
-#
-# RAM budget at 256G: ~168 GB model; ~88 GB remaining for OS + KV cache — comfortable
-# Note: vision requires a llama.cpp build with vision support enabled
-# =============================================================================
-
 name: llama-mac-256g-llama4-maverick
 
 services:

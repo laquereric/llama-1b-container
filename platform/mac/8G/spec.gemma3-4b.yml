@@ -1,0 +1,23 @@
+model_name: Gemma-3-4B
+family: gemma3
+params_b: 4.0
+active_params_b: 4.0
+quant: Q4_0
+file_size_gb: 2.5
+ctx_size: 8192
+flash_attn: true
+
+download:
+  repo: google/gemma-3-4b-it-qat-q4_0-gguf
+  file: gemma-3-4b-it-q4_0.gguf
+  cmd: "huggingface-cli download google/gemma-3-4b-it-qat-q4_0-gguf gemma-3-4b-it-q4_0.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 8
+  model_gb: 2.5
+  remaining_gb: 5.5
+  pressure: comfortable
+
+tags: [general, multimodal]
+license: Gemma Terms
+description: Official Google QAT quant; multimodal text+image; 128K context

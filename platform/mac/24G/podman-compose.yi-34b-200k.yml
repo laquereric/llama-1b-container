@@ -1,20 +1,3 @@
-# =============================================================================
-# podman-compose.yi-34b-200k.yml — Yi-34B-Chat-200K  •  Q4_K_M  •  ~20.7 GB
-# 200K token context window; best for very long documents; Apache 2.0
-# Note: keep actual ctx-size under 32K on 24 GB to avoid KV cache overflow
-#
-# ⚠  CLOSE ALL OTHER APPS — leaves ~3 GB for OS + KV cache
-#
-# Download:
-#   huggingface-cli download LoneStriker/Yi-34B-Chat-200K-GGUF \
-#     Yi-34B-Chat-200K-Q4_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.yi-34b-200k.yml up
-#
-# RAM budget at 24G: ~20.7 GB model; ~3 GB remaining — very tight; close all apps
-# =============================================================================
-
 name: llama-mac-24g-yi-34b-200k
 
 services:

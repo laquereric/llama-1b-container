@@ -1,0 +1,23 @@
+model_name: Qwen3-4B
+family: qwen3
+params_b: 4.0
+active_params_b: 4.0
+quant: Q4_K_M
+file_size_gb: 2.8
+ctx_size: 8192
+flash_attn: true
+
+download:
+  repo: Qwen/Qwen3-4B-GGUF
+  file: Qwen3-4B-Q4_K_M.gguf
+  cmd: "huggingface-cli download Qwen/Qwen3-4B-GGUF Qwen3-4B-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 8
+  model_gb: 2.8
+  remaining_gb: 5.2
+  pressure: comfortable
+
+tags: [general, reasoning, multilingual]
+license: Apache 2.0
+description: Best general chat for 8 GB Mac; thinking + non-thinking modes; 128K context

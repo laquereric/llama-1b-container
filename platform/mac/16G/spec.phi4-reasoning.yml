@@ -1,0 +1,23 @@
+model_name: Phi-4-reasoning
+family: phi4
+params_b: 14.0
+active_params_b: 14.0
+quant: Q4_K_M
+file_size_gb: 8.5
+ctx_size: 8192
+flash_attn: true
+
+download:
+  repo: unsloth/Phi-4-reasoning-GGUF
+  file: Phi-4-reasoning-Q4_K_M.gguf
+  cmd: "huggingface-cli download unsloth/Phi-4-reasoning-GGUF Phi-4-reasoning-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 16
+  model_gb: 8.5
+  remaining_gb: 7.5
+  pressure: comfortable
+
+tags: [reasoning, math]
+license: MIT
+description: Chain-of-thought at 14B; o1-mini class math; trained specifically for structured reasoning

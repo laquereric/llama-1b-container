@@ -1,20 +1,3 @@
-# =============================================================================
-# podman-compose.qwen3-235b-a22b.yml — Qwen3-235B-A22B  •  Q4_K_M  •  ~112 GB
-# Frontier MoE; 235B total / 22B active per token; 128K context; Apache 2.0
-# Thinking + non-thinking modes; comfortable fit with ample headroom at 256 GB
-# Upgrade from 128G tier: generous KV cache budget for very long sessions
-#
-# Download (sharded — llama-server auto-loads all shards from first file):
-#   huggingface-cli download Qwen/Qwen3-235B-A22B-GGUF \
-#     --include "Qwen3-235B-A22B-Q4_K_M*.gguf" \
-#     --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.qwen3-235b-a22b.yml up
-#
-# RAM budget at 256G: ~112 GB model; ~144 GB remaining — very comfortable
-# =============================================================================
-
 name: llama-mac-256g-qwen3-235b-a22b
 
 services:

@@ -1,0 +1,19 @@
+model_name: Command-R+ 104B
+family: command-r
+params_b: 104.0
+quant: IQ3_XS
+file_size_gb: 43.6
+ctx_size: 16384
+flash_attn: true
+download:
+  repo: bartowski/c4ai-command-r-plus-GGUF
+  file: c4ai-command-r-plus-IQ3_XS.gguf
+  cmd: "huggingface-cli download bartowski/c4ai-command-r-plus-GGUF c4ai-command-r-plus-IQ3_XS.gguf --local-dir ~/models"
+ram_budget:
+  total_gb: 64
+  model_gb: 43.6
+  remaining_gb: 20.4
+  pressure: comfortable
+tags: [rag, tool-use, multilingual, long-context]
+license: CC-BY-NC 4.0
+description: Best RAG quality with 104B capacity; native tool use; 23 languages; non-commercial only

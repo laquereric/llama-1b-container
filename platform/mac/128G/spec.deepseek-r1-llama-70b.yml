@@ -1,0 +1,22 @@
+model_name: DeepSeek-R1-Distill-Llama-70B
+family: deepseek-r1
+params_b: 70.0
+quant: Q8_0
+file_size_gb: 75.0
+ctx_size: 16384
+flash_attn: true
+download:
+  repo: bartowski/DeepSeek-R1-Distill-Llama-70B-GGUF
+  include: "DeepSeek-R1-Distill-Llama-70B-Q8_0*.gguf"
+  first_shard: DeepSeek-R1-Distill-Llama-70B-Q8_0-00001-of-00002.gguf
+  sharded: true
+  note: "llama-server auto-loads all shards; pass first_shard as the -m argument"
+  cmd: "huggingface-cli download bartowski/DeepSeek-R1-Distill-Llama-70B-GGUF --include \"DeepSeek-R1-Distill-Llama-70B-Q8_0*.gguf\" --local-dir ~/models"
+ram_budget:
+  total_gb: 128
+  model_gb: 75.0
+  remaining_gb: 53.0
+  pressure: comfortable
+tags: [reasoning, math, coding, thinking]
+license: Apache 2.0
+description: Near-lossless Q8_0 reasoning quality; o1-class chain-of-thought; best reasoning for 128 GB Mac

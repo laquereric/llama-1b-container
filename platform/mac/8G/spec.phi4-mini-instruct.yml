@@ -1,0 +1,23 @@
+model_name: Phi-4-mini-instruct
+family: phi4
+params_b: 3.8
+active_params_b: 3.8
+quant: Q4_K_M
+file_size_gb: 2.5
+ctx_size: 8192
+flash_attn: true
+
+download:
+  repo: unsloth/Phi-4-mini-instruct-GGUF
+  file: Phi-4-mini-instruct-Q4_K_M.gguf
+  cmd: "huggingface-cli download unsloth/Phi-4-mini-instruct-GGUF Phi-4-mini-instruct-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 8
+  model_gb: 2.5
+  remaining_gb: 5.5
+  pressure: comfortable
+
+tags: [general, coding]
+license: MIT
+description: Excellent quality-per-param; 128K context; strong instruction following and coding

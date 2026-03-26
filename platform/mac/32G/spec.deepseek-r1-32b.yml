@@ -1,0 +1,19 @@
+model_name: DeepSeek-R1-Distill-Qwen-32B
+family: deepseek-r1
+params_b: 32.0
+quant: Q5_K_M
+file_size_gb: 23.0
+ctx_size: 16384
+flash_attn: true
+download:
+  repo: bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF
+  file: DeepSeek-R1-Distill-Qwen-32B-Q5_K_M.gguf
+  cmd: "huggingface-cli download bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF DeepSeek-R1-Distill-Qwen-32B-Q5_K_M.gguf --local-dir ~/models"
+ram_budget:
+  total_gb: 32
+  model_gb: 23.0
+  remaining_gb: 9.0
+  pressure: comfortable
+tags: [reasoning, math, coding, thinking]
+license: Apache 2.0
+description: Best reasoning on 32 GB; Q5_K_M gives ~98% F16 quality; generates thinking tokens

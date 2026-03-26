@@ -1,20 +1,3 @@
-# =============================================================================
-# podman-compose.deepseek-r1-32b.yml — DeepSeek-R1-Distill-Qwen-32B  •  Q4_K_M  •  ~19.9 GB
-# Best reasoning on 24 GB; o1-class chain-of-thought; Apache 2.0
-# Note: thinking tokens make total generation longer than final answer alone
-#
-# ⚠  CLOSE ALL OTHER APPS — leaves ~4 GB for OS + KV cache
-#
-# Download:
-#   huggingface-cli download bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF \
-#     DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.deepseek-r1-32b.yml up
-#
-# RAM budget at 24G: ~19.9 GB model; ~4 GB remaining for OS + KV cache — tight
-# =============================================================================
-
 name: llama-mac-24g-deepseek-r1-32b
 
 services:

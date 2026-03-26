@@ -1,0 +1,23 @@
+model_name: Llama-4-Scout
+family: llama4
+params_b: 109.0
+active_params_b: 17.0
+quant: Q4_K_M
+file_size_gb: 60.0
+ctx_size: 32768
+flash_attn: true
+download:
+  repo: unsloth/Llama-4-Scout-17B-16E-Instruct-GGUF
+  include: "Llama-4-Scout-17B-16E-Instruct-Q4_K_M*.gguf"
+  first_shard: Llama-4-Scout-17B-16E-Instruct-Q4_K_M-00001-of-00004.gguf
+  sharded: true
+  note: "llama-server auto-loads all shards; pass first_shard as the -m argument"
+  cmd: "huggingface-cli download unsloth/Llama-4-Scout-17B-16E-Instruct-GGUF --include \"Llama-4-Scout-17B-16E-Instruct-Q4_K_M*.gguf\" --local-dir ~/models"
+ram_budget:
+  total_gb: 128
+  model_gb: 60.0
+  remaining_gb: 68.0
+  pressure: comfortable
+tags: [multimodal, vision, long-context, moe, fast]
+license: Meta Llama 4 License
+description: MoE 109B/17B active; multimodal; 10M context window; standard Q4_K_M quality; sharded

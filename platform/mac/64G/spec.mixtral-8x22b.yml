@@ -1,0 +1,23 @@
+model_name: Mixtral-8x22B-Instruct
+family: mixtral
+params_b: 141.0
+active_params_b: 39.0
+quant: Q2_K
+file_size_gb: 57.0
+ctx_size: 8192
+flash_attn: true
+download:
+  repo: TheBloke/Mixtral-8x22B-Instruct-v0.1-GGUF
+  include: "mixtral-8x22b-instruct-v0.1.Q2_K*.gguf"
+  first_shard: mixtral-8x22b-instruct-v0.1.Q2_K-00001-of-00005.gguf
+  sharded: true
+  note: "llama-server auto-loads all shards; pass first_shard as the -m argument"
+  cmd: "huggingface-cli download TheBloke/Mixtral-8x22B-Instruct-v0.1-GGUF --include \"mixtral-8x22b-instruct-v0.1.Q2_K*.gguf\" --local-dir ~/models"
+ram_budget:
+  total_gb: 64
+  model_gb: 57.0
+  remaining_gb: 7.0
+  pressure: close_all_apps
+tags: [general, moe, long-context]
+license: Apache 2.0
+description: Sparse MoE 141B/39B active; 64K context; close all apps on 64 GB; sharded

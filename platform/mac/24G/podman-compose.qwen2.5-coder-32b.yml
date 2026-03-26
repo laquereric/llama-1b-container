@@ -1,20 +1,3 @@
-# =============================================================================
-# podman-compose.qwen2.5-coder-32b.yml — Qwen2.5-Coder-32B-Instruct  •  Q4_K_M  •  ~20 GB
-# Best local coding model; code generation, debugging, and completion; Apache 2.0
-# 128K context; top open-weights code model overall
-#
-# ⚠  CLOSE ALL OTHER APPS — leaves ~4 GB for OS + KV cache
-#
-# Download:
-#   huggingface-cli download bartowski/Qwen2.5-Coder-32B-Instruct-GGUF \
-#     Qwen2.5-Coder-32B-Instruct-Q4_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.qwen2.5-coder-32b.yml up
-#
-# RAM budget at 24G: ~20 GB model; ~4 GB remaining for OS + KV cache — tight
-# =============================================================================
-
 name: llama-mac-24g-qwen2-5-coder-32b
 
 services:

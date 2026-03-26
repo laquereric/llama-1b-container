@@ -1,18 +1,3 @@
-# =============================================================================
-# podman-compose.mistral-nemo-12b.yml — Mistral-Nemo-12B-Instruct  •  Q4_K_M  •  ~7.5 GB
-# 128K context; Apache 2.0; sliding window attention; NVIDIA collaboration
-# Best for RAG, long documents, and summarization on 16 GB Mac
-#
-# Download:
-#   huggingface-cli download bartowski/Mistral-Nemo-Instruct-2407-GGUF \
-#     Mistral-Nemo-Instruct-2407-Q4_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.mistral-nemo-12b.yml up
-#
-# RAM budget at 16G: ~7.5 GB model; comfortable fit; good KV cache headroom for long docs
-# =============================================================================
-
 name: llama-mac-16g-mistral-nemo-12b
 
 services:

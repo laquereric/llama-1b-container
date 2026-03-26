@@ -1,18 +1,3 @@
-# =============================================================================
-# podman-compose.sky-t1-32b.yml — Sky-T1-32B-Preview  •  Q5_K_M  •  ~23 GB
-# o1-preview competitive on AIME/MATH; RL fine-tune of Qwen2.5-32B; Apache 2.0
-# Comfortable fit on 32 GB at Q5_K_M; strong reasoning and math
-#
-# Download:
-#   huggingface-cli download NovaSky-UC/Sky-T1-32B-Preview-GGUF \
-#     Sky-T1-32B-Preview-Q5_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.sky-t1-32b.yml up
-#
-# RAM budget at 32G: ~23 GB model; ~9 GB remaining for OS + KV cache — comfortable
-# =============================================================================
-
 name: llama-mac-32g-sky-t1-32b
 
 services:

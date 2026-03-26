@@ -1,21 +1,3 @@
-# =============================================================================
-# podman-compose.llama4-scout.yml — Llama-4-Scout  •  Q4_K_M  •  ~60 GB
-# MoE: 109B total / 17B active per token; multimodal; 10M token context window
-# Meta license; standard 4-bit quality on 128 GB — comfortable with headroom
-# Significantly higher quality than IQ1_S; practical long-context multimodal
-#
-# Download (sharded — llama-server auto-loads all shards from first file):
-#   huggingface-cli download unsloth/Llama-4-Scout-17B-16E-Instruct-GGUF \
-#     --include "Llama-4-Scout-17B-16E-Instruct-Q4_K_M*.gguf" \
-#     --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.llama4-scout.yml up
-#
-# RAM budget at 128G: ~60 GB model; ~68 GB remaining — very comfortable
-# Note: vision requires a llama.cpp build with vision support enabled
-# =============================================================================
-
 name: llama-mac-128g-llama4-scout
 
 services:

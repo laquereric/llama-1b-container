@@ -1,0 +1,22 @@
+model_name: Command-R+ 104B
+family: command-r
+params_b: 104.0
+quant: Q8_0
+file_size_gb: 110.0
+ctx_size: 65536
+flash_attn: true
+download:
+  repo: bartowski/c4ai-command-r-plus-GGUF
+  include: "c4ai-command-r-plus-Q8_0*.gguf"
+  first_shard: c4ai-command-r-plus-Q8_0-00001-of-00004.gguf
+  sharded: true
+  note: "llama-server auto-loads all shards; pass first_shard as the -m argument"
+  cmd: "huggingface-cli download bartowski/c4ai-command-r-plus-GGUF --include \"c4ai-command-r-plus-Q8_0*.gguf\" --local-dir ~/models"
+ram_budget:
+  total_gb: 256
+  model_gb: 110.0
+  remaining_gb: 146.0
+  pressure: comfortable
+tags: [rag, tool-use, multilingual, long-context]
+license: CC-BY-NC 4.0
+description: Q8_0 maximum quality; best document synthesis and grounded output; non-commercial only

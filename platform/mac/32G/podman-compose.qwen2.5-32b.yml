@@ -1,18 +1,3 @@
-# =============================================================================
-# podman-compose.qwen2.5-32b.yml — Qwen2.5-32B-Instruct  •  Q5_K_M  •  ~23 GB
-# Comfortable fit on 32 GB; higher quality than Q4_K_M with 9 GB of headroom
-# Best multilingual general model; 100+ languages; 128K context; Apache 2.0
-#
-# Download:
-#   huggingface-cli download bartowski/Qwen2.5-32B-Instruct-GGUF \
-#     Qwen2.5-32B-Instruct-Q5_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.qwen2.5-32b.yml up
-#
-# RAM budget at 32G: ~23 GB model; ~9 GB remaining for OS + KV cache — comfortable
-# =============================================================================
-
 name: llama-mac-32g-qwen2-5-32b
 
 services:

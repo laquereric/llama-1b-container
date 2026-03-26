@@ -1,0 +1,23 @@
+model_name: Qwen3-8B
+family: qwen3
+params_b: 8.0
+active_params_b: 8.0
+quant: Q4_K_M
+file_size_gb: 5.0
+ctx_size: 16384
+flash_attn: true
+
+download:
+  repo: Qwen/Qwen3-8B-GGUF
+  file: Qwen3-8B-Q4_K_M.gguf
+  cmd: "huggingface-cli download Qwen/Qwen3-8B-GGUF Qwen3-8B-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 16
+  model_gb: 5.0
+  remaining_gb: 11.0
+  pressure: comfortable
+
+tags: [general, reasoning]
+license: Apache 2.0
+description: Thinking + non-thinking modes; generous KV headroom on 16 GB; 128K context

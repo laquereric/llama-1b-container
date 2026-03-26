@@ -1,18 +1,3 @@
-# =============================================================================
-# podman-compose.phi4-mini-reasoning.yml — Phi-4-mini-reasoning  •  Q4_K_M  •  ~2.5 GB
-# Compact chain-of-thought model; best math reasoning under 3 GB; MIT license
-# Generates thinking tokens like R1 distills but at 3.8B parameter footprint
-#
-# Download:
-#   huggingface-cli download unsloth/Phi-4-mini-reasoning-GGUF \
-#     Phi-4-mini-reasoning-Q4_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.phi4-mini-reasoning.yml up
-#
-# RAM budget at 8G: ~2.5 GB model; comfortable fit with ample KV cache headroom
-# =============================================================================
-
 name: llama-mac-8g-phi4-mini-reasoning
 
 services:

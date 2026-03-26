@@ -1,0 +1,23 @@
+model_name: Phi-4-14B
+family: phi4
+params_b: 14.0
+active_params_b: 14.0
+quant: Q4_K_M
+file_size_gb: 8.5
+ctx_size: 8192
+flash_attn: true
+
+download:
+  repo: bartowski/phi-4-GGUF
+  file: phi-4-Q4_K_M.gguf
+  cmd: "huggingface-cli download bartowski/phi-4-GGUF phi-4-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 16
+  model_gb: 8.5
+  remaining_gb: 7.5
+  pressure: comfortable
+
+tags: [general, reasoning, coding]
+license: MIT
+description: Best quality for 16 GB Mac; beats many 70B models on reasoning; 16K context

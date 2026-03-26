@@ -1,0 +1,23 @@
+model_name: Phi-4-mini-reasoning
+family: phi4
+params_b: 3.8
+active_params_b: 3.8
+quant: Q4_K_M
+file_size_gb: 2.5
+ctx_size: 8192
+flash_attn: true
+
+download:
+  repo: unsloth/Phi-4-mini-reasoning-GGUF
+  file: Phi-4-mini-reasoning-Q4_K_M.gguf
+  cmd: "huggingface-cli download unsloth/Phi-4-mini-reasoning-GGUF Phi-4-mini-reasoning-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 8
+  model_gb: 2.5
+  remaining_gb: 5.5
+  pressure: comfortable
+
+tags: [reasoning, math]
+license: MIT
+description: Compact chain-of-thought; best math reasoning under 3 GB; generates thinking tokens

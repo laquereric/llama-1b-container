@@ -1,0 +1,23 @@
+model_name: Qwen2.5-Coder-32B-Instruct
+family: qwen2.5-coder
+params_b: 32.0
+active_params_b: 32.0
+quant: Q4_K_M
+file_size_gb: 20.0
+ctx_size: 8192
+flash_attn: true
+
+download:
+  repo: bartowski/Qwen2.5-Coder-32B-Instruct-GGUF
+  file: Qwen2.5-Coder-32B-Instruct-Q4_K_M.gguf
+  cmd: "huggingface-cli download bartowski/Qwen2.5-Coder-32B-Instruct-GGUF Qwen2.5-Coder-32B-Instruct-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 24
+  model_gb: 20.0
+  remaining_gb: 4.0
+  pressure: close_all_apps
+
+tags: [coding]
+license: Apache 2.0
+description: Best local coding model; code generation and debugging; close all other apps

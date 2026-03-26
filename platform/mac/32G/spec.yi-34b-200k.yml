@@ -1,0 +1,19 @@
+model_name: Yi-34B-Chat-200K
+family: yi
+params_b: 34.0
+quant: Q4_K_M
+file_size_gb: 20.7
+ctx_size: 32768
+flash_attn: true
+download:
+  repo: LoneStriker/Yi-34B-Chat-200K-GGUF
+  file: Yi-34B-Chat-200K-Q4_K_M.gguf
+  cmd: "huggingface-cli download LoneStriker/Yi-34B-Chat-200K-GGUF Yi-34B-Chat-200K-Q4_K_M.gguf --local-dir ~/models"
+ram_budget:
+  total_gb: 32
+  model_gb: 20.7
+  remaining_gb: 11.3
+  pressure: comfortable
+tags: [long-context, documents]
+license: Apache 2.0
+description: 200K context window; best for very long documents; use 32K ctx on 32 GB for practical KV budget

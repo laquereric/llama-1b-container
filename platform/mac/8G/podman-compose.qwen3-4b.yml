@@ -1,18 +1,3 @@
-# =============================================================================
-# podman-compose.qwen3-4b.yml — Qwen3-4B  •  Q4_K_M  •  ~2.8 GB
-# Best general chat for 8 GB Mac; reasoning + non-thinking modes; 128K context
-# Apache 2.0
-#
-# Download:
-#   huggingface-cli download Qwen/Qwen3-4B-GGUF \
-#     Qwen3-4B-Q4_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.qwen3-4b.yml up
-#
-# RAM budget at 8G: ~4 GB for model; comfortable fit with KV cache headroom
-# =============================================================================
-
 name: llama-mac-8g-qwen3-4b
 
 services:

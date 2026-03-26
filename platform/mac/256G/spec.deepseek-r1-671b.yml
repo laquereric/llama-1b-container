@@ -1,0 +1,23 @@
+model_name: DeepSeek-R1 671B
+family: deepseek-r1
+params_b: 671.0
+active_params_b: 37.0
+quant: IQ1_S
+file_size_gb: 170.0
+ctx_size: 8192
+flash_attn: true
+download:
+  repo: unsloth/DeepSeek-R1-GGUF
+  include: "DeepSeek-R1-IQ1_S*.gguf"
+  first_shard: DeepSeek-R1-IQ1_S-00001-of-00003.gguf
+  sharded: true
+  note: "llama-server auto-loads all shards; pass first_shard as the -m argument"
+  cmd: "huggingface-cli download unsloth/DeepSeek-R1-GGUF --include \"DeepSeek-R1-IQ1_S*.gguf\" --local-dir ~/models"
+ram_budget:
+  total_gb: 256
+  model_gb: 170.0
+  remaining_gb: 86.0
+  pressure: comfortable
+tags: [reasoning, math, coding, thinking, moe]
+license: Apache 2.0
+description: Frontier reasoning MoE 671B/37B active; matches OpenAI o1; Unsloth dynamic IQ1_S; sharded

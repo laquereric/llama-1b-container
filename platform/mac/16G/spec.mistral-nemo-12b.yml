@@ -1,0 +1,23 @@
+model_name: Mistral-Nemo-12B-Instruct
+family: mistral
+params_b: 12.0
+active_params_b: 12.0
+quant: Q4_K_M
+file_size_gb: 7.5
+ctx_size: 16384
+flash_attn: true
+
+download:
+  repo: bartowski/Mistral-Nemo-Instruct-2407-GGUF
+  file: Mistral-Nemo-Instruct-2407-Q4_K_M.gguf
+  cmd: "huggingface-cli download bartowski/Mistral-Nemo-Instruct-2407-GGUF Mistral-Nemo-Instruct-2407-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 16
+  model_gb: 7.5
+  remaining_gb: 8.5
+  pressure: comfortable
+
+tags: [rag, long-context, multilingual]
+license: Apache 2.0
+description: 128K context; best for RAG and long documents on 16 GB; sliding window attention

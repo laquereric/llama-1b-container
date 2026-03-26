@@ -1,20 +1,3 @@
-# =============================================================================
-# podman-compose.deepseek-r1-llama-70b.yml — DeepSeek-R1-Distill-Llama-70B  •  Q8_0  •  ~75 GB
-# Near-lossless reasoning quality; o1-class chain-of-thought; Apache 2.0
-# Best reasoning model config for 128 GB Mac
-# Generates thinking tokens — total output is longer than the final answer
-#
-# Download (sharded — llama-server auto-loads all shards from first file):
-#   huggingface-cli download bartowski/DeepSeek-R1-Distill-Llama-70B-GGUF \
-#     --include "DeepSeek-R1-Distill-Llama-70B-Q8_0*.gguf" \
-#     --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.deepseek-r1-llama-70b.yml up
-#
-# RAM budget at 128G: ~75 GB model; ~53 GB remaining — comfortable
-# =============================================================================
-
 name: llama-mac-128g-deepseek-r1-llama-70b
 
 services:

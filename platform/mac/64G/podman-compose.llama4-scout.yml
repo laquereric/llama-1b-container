@@ -1,22 +1,3 @@
-# =============================================================================
-# podman-compose.llama4-scout.yml — Llama-4-Scout  •  IQ1_S dynamic  •  ~33 GB
-# MoE: 109B total / 17B active per token; multimodal; 10M token context window
-# Meta license; fastest viable local large model due to MoE active param count
-# Unsloth dynamic quant preserves quality better than standard IQ1_S
-#
-# Download:
-#   huggingface-cli download unsloth/Llama-4-Scout-17B-16E-Instruct-GGUF \
-#     --include "Llama-4-Scout-17B-16E-Instruct-IQ1_S*.gguf" \
-#     --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.llama4-scout.yml up
-#
-# Note: pass the first shard file to llama-server; it auto-loads remaining shards
-# RAM budget at 64G: ~33 GB model; ~31 GB remaining — comfortable; 10M context needs large KV
-# Note: vision requires a llama.cpp build with vision support enabled
-# =============================================================================
-
 name: llama-mac-64g-llama4-scout
 
 services:

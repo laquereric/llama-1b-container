@@ -1,0 +1,23 @@
+model_name: Llama-4-Maverick
+family: llama4
+params_b: 402.0
+active_params_b: 17.0
+quant: Q2_K
+file_size_gb: 168.0
+ctx_size: 32768
+flash_attn: true
+download:
+  repo: unsloth/Llama-4-Maverick-17B-128E-Instruct-GGUF
+  include: "Llama-4-Maverick-17B-128E-Instruct-Q2_K*.gguf"
+  first_shard: Llama-4-Maverick-17B-128E-Instruct-Q2_K-00001-of-00007.gguf
+  sharded: true
+  note: "llama-server auto-loads all shards; pass first_shard as the -m argument"
+  cmd: "huggingface-cli download unsloth/Llama-4-Maverick-17B-128E-Instruct-GGUF --include \"Llama-4-Maverick-17B-128E-Instruct-Q2_K*.gguf\" --local-dir ~/models"
+ram_budget:
+  total_gb: 256
+  model_gb: 168.0
+  remaining_gb: 88.0
+  pressure: comfortable
+tags: [multimodal, vision, long-context, moe]
+license: Meta Llama 4 License
+description: MoE 402B/17B active; multimodal; 1M context window; Q2_K substantially better than IQ1_S

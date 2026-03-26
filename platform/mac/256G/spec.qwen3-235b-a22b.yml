@@ -1,0 +1,23 @@
+model_name: Qwen3-235B-A22B
+family: qwen3
+params_b: 235.0
+active_params_b: 22.0
+quant: Q4_K_M
+file_size_gb: 112.0
+ctx_size: 65536
+flash_attn: true
+download:
+  repo: Qwen/Qwen3-235B-A22B-GGUF
+  include: "Qwen3-235B-A22B-Q4_K_M*.gguf"
+  first_shard: Qwen3-235B-A22B-Q4_K_M-00001-of-00006.gguf
+  sharded: true
+  note: "llama-server auto-loads all shards; pass first_shard as the -m argument"
+  cmd: "huggingface-cli download Qwen/Qwen3-235B-A22B-GGUF --include \"Qwen3-235B-A22B-Q4_K_M*.gguf\" --local-dir ~/models"
+ram_budget:
+  total_gb: 256
+  model_gb: 112.0
+  remaining_gb: 144.0
+  pressure: comfortable
+tags: [reasoning, multilingual, thinking, moe, long-context]
+license: Apache 2.0
+description: Frontier MoE 235B/22B active; thinking + non-thinking modes; generous KV budget at 256 GB

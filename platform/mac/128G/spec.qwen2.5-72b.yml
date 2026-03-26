@@ -1,0 +1,22 @@
+model_name: Qwen2.5-72B-Instruct
+family: qwen2.5
+params_b: 72.0
+quant: Q8_0
+file_size_gb: 77.0
+ctx_size: 32768
+flash_attn: true
+download:
+  repo: bartowski/Qwen2.5-72B-Instruct-GGUF
+  include: "Qwen2.5-72B-Instruct-Q8_0*.gguf"
+  first_shard: Qwen2.5-72B-Instruct-Q8_0-00001-of-00002.gguf
+  sharded: true
+  note: "llama-server auto-loads all shards; pass first_shard as the -m argument"
+  cmd: "huggingface-cli download bartowski/Qwen2.5-72B-Instruct-GGUF --include \"Qwen2.5-72B-Instruct-Q8_0*.gguf\" --local-dir ~/models"
+ram_budget:
+  total_gb: 128
+  model_gb: 77.0
+  remaining_gb: 51.0
+  pressure: comfortable
+tags: [general, multilingual, long-context]
+license: Apache 2.0
+description: Near-lossless Q8_0 quality; best multilingual at 72B; 100+ languages; ample KV cache

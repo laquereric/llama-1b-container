@@ -1,18 +1,3 @@
-# =============================================================================
-# podman-compose.qwen2.5-coder-14b.yml — Qwen2.5-Coder-14B-Instruct  •  Q4_K_M  •  ~9.0 GB
-# Best coding model for 16 GB; code generation, completion, and debugging
-# Apache 2.0; trained specifically on code; 128K context
-#
-# Download:
-#   huggingface-cli download bartowski/Qwen2.5-Coder-14B-Instruct-GGUF \
-#     Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.qwen2.5-coder-14b.yml up
-#
-# RAM budget at 16G: ~9.0 GB model; ~7 GB remaining for OS + KV cache — comfortable
-# =============================================================================
-
 name: llama-mac-16g-qwen2-5-coder-14b
 
 services:

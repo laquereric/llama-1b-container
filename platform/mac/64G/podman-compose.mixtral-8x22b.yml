@@ -1,21 +1,3 @@
-# =============================================================================
-# podman-compose.mixtral-8x22b.yml — Mixtral-8x22B-Instruct  •  Q2_K  •  ~57 GB
-# Sparse MoE: 141B total / 39B active per token; 64K context; Apache 2.0
-# Note: all expert weights must be in RAM even though only some activate per token
-#
-# ⚠  CLOSE ALL OTHER APPS — ~57 GB model leaves ~7 GB for OS + KV cache at 64 GB
-#
-# Download (sharded — llama-server auto-loads all shards from first file):
-#   huggingface-cli download TheBloke/Mixtral-8x22B-Instruct-v0.1-GGUF \
-#     --include "mixtral-8x22b-instruct-v0.1.Q2_K*.gguf" \
-#     --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.mixtral-8x22b.yml up
-#
-# RAM budget at 64G: ~57 GB model; ~7 GB remaining — tight; close all apps
-# =============================================================================
-
 name: llama-mac-64g-mixtral-8x22b
 
 services:

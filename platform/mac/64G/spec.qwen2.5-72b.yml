@@ -1,0 +1,19 @@
+model_name: Qwen2.5-72B-Instruct
+family: qwen2.5
+params_b: 72.0
+quant: Q4_K_M
+file_size_gb: 43.0
+ctx_size: 16384
+flash_attn: true
+download:
+  repo: bartowski/Qwen2.5-72B-Instruct-GGUF
+  file: Qwen2.5-72B-Instruct-Q4_K_M.gguf
+  cmd: "huggingface-cli download bartowski/Qwen2.5-72B-Instruct-GGUF Qwen2.5-72B-Instruct-Q4_K_M.gguf --local-dir ~/models"
+ram_budget:
+  total_gb: 64
+  model_gb: 43.0
+  remaining_gb: 21.0
+  pressure: comfortable
+tags: [general, multilingual, long-context]
+license: Apache 2.0
+description: Best multilingual model for 64 GB Mac; 100+ languages; 128K context

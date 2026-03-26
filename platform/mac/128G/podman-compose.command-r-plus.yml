@@ -1,20 +1,3 @@
-# =============================================================================
-# podman-compose.command-r-plus.yml — Command-R+ 104B  •  Q6_K  •  ~85.2 GB
-# Best RAG quality at full 104B; native tool use; 23 languages; 128K context
-# CC-BY-NC license — non-commercial use only without a Cohere enterprise agreement
-# Q6_K gives ~99% of F16 quality — near-lossless RAG and document synthesis
-#
-# Download (sharded — llama-server auto-loads all shards from first file):
-#   huggingface-cli download bartowski/c4ai-command-r-plus-GGUF \
-#     --include "c4ai-command-r-plus-Q6_K*.gguf" \
-#     --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.command-r-plus.yml up
-#
-# RAM budget at 128G: ~85 GB model; ~43 GB remaining for OS + KV cache — comfortable
-# =============================================================================
-
 name: llama-mac-128g-command-r-plus
 
 services:

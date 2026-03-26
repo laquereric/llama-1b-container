@@ -1,0 +1,19 @@
+model_name: Command-R 35B
+family: command-r
+params_b: 35.0
+quant: Q4_K_M
+file_size_gb: 22.0
+ctx_size: 16384
+flash_attn: true
+download:
+  repo: bartowski/c4ai-command-r-GGUF
+  file: c4ai-command-r-Q4_K_M.gguf
+  cmd: "huggingface-cli download bartowski/c4ai-command-r-GGUF c4ai-command-r-Q4_K_M.gguf --local-dir ~/models"
+ram_budget:
+  total_gb: 32
+  model_gb: 22.0
+  remaining_gb: 10.0
+  pressure: comfortable
+tags: [rag, tool-use, multilingual, long-context]
+license: CC-BY-NC 4.0
+description: Best RAG model; native tool use; 23 languages; 128K context; non-commercial only

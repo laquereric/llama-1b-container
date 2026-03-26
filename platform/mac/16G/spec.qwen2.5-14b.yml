@@ -1,0 +1,23 @@
+model_name: Qwen2.5-14B-Instruct
+family: qwen2.5
+params_b: 14.0
+active_params_b: 14.0
+quant: Q4_K_M
+file_size_gb: 9.0
+ctx_size: 16384
+flash_attn: true
+
+download:
+  repo: bartowski/Qwen2.5-14B-Instruct-GGUF
+  file: Qwen2.5-14B-Instruct-Q4_K_M.gguf
+  cmd: "huggingface-cli download bartowski/Qwen2.5-14B-Instruct-GGUF Qwen2.5-14B-Instruct-Q4_K_M.gguf --local-dir ~/models"
+
+ram_budget:
+  total_gb: 16
+  model_gb: 9.0
+  remaining_gb: 7.0
+  pressure: comfortable
+
+tags: [general, multilingual]
+license: Apache 2.0
+description: Best multilingual general model at 14B; 100+ languages; 128K context

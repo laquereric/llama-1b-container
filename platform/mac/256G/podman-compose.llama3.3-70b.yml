@@ -1,20 +1,3 @@
-# =============================================================================
-# podman-compose.llama3.3-70b.yml — Llama-3.3-70B-Instruct  •  Q8_0  •  ~75 GB
-# Near-lossless quality; best dense 70B; 128K context; Meta license
-# At 256 GB: extremely comfortable — 64K context with ample KV cache budget
-# Use when fast, high-quality responses matter more than frontier-scale capacity
-#
-# Download (sharded — llama-server auto-loads all shards from first file):
-#   huggingface-cli download bartowski/Llama-3.3-70B-Instruct-GGUF \
-#     --include "Llama-3.3-70B-Instruct-Q8_0*.gguf" \
-#     --local-dir ~/models
-#
-# Usage:
-#   podman-compose -f podman-compose.llama3.3-70b.yml up
-#
-# RAM budget at 256G: ~75 GB model; ~181 GB remaining — maximum headroom
-# =============================================================================
-
 name: llama-mac-256g-llama3-3-70b
 
 services:
